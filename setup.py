@@ -11,13 +11,22 @@ with open('HISTORY.rst') as history_file:
 
 requirements = [
     'Click>=6.0',
-    # TODO: put package requirements here
+    'wheel >= 0.29.0',
+    'matplotlib >= 1.5.1',
+    'bumpversion >= 0.5.3',
+    'Sphinx >= 1.4.8',
+    'PyYAML >= 3.11',
+    'zipline >= 1.0.2'
 ]
 
 test_requirements = [
-    # TODO: put package test requirements here
+    'pytest',
+    'pytest-cov',
+    'coverage',
+    'codecov',
+    'tox',
+    'flake8',
 ]
-
 setup(
     name='marketcrush',
     version='0.1.0',
