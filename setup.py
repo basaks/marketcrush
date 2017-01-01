@@ -10,13 +10,14 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'Click>=6.0',
+    'Click >= 6.0',
     'wheel >= 0.29.0',
     'matplotlib >= 1.5.1',
     'bumpversion >= 0.5.3',
     'Sphinx >= 1.4.8',
     'PyYAML >= 3.11',
-    'zipline >= 1.0.2'
+    'zipline >= 1.0.2',
+    'TA-lib'
 ]
 
 test_requirements = [
