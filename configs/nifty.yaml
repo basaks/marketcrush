@@ -17,4 +17,6 @@ strategy:
     entry_ma_timeperiod: 50
     atr_stops_period: 25
     show_plot: False
+    max_hold_time: 300  # minutes, not used yet
+    commision: 0.001  # 10 bps, not used yet
 
