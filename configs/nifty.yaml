@@ -1,0 +1,20 @@
+
+data:
+    - path: ~/temp/market_data/nifty1min.csv
+
+
+
+strategy:
+    time_periods:
+        short_tp: 25
+        long_tp: 50
+        filter_fp: 200  # filter fast period
+        filter_sp: 400  # filter short period
+
+    risk_factor: 0.002  # 20 bps
+    initial_cap: 1.0e6
+    atr_exit_fraction: 3
+    entry_ma_timeperiod: 50
+    atr_stops_period: 25
+    show_plot: False
+
