@@ -18,7 +18,7 @@ marketcrush
      :alt: Updates
 
 
-Futures Backtester Built on top of Quantopian's Zipline
+Futures Backtester Built on Quantopian's Zipline
 
 
 * Free software: Apache Software License 2.0
@@ -30,43 +30,41 @@ Features
 
 * TODO
 
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
-
 
 Installation
 ------------
 
-### Dependencies
+Dependencies
+============
 
 To use TA-Lib for python, you need to have the
-[TA-Lib](http://ta-lib.org/hdr_dw.html) already installed:
+`TA-Lib <http://ta-lib.org/hdr_dw.html>`_ already installed:
 
-##### Mac OS X
+Mac OS X
+========
 
-```
-$ brew install ta-lib
-```
+.. code:: console
 
-##### Windows
+    $ brew install ta-lib
 
-Download [ta-lib-0.4.0-msvc.zip](http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-msvc.zip)
+
+Windows
+=======
+
+Download `ta-lib-0.4.0-msvc.zip <http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-msvc.zip>`_
 and unzip to ``C:\ta-lib``
 
-> This is a 32-bit release.  If you want to use 64-bit Python, you will need
-> to build a 64-bit version of the library.
+This is a 32-bit release.  If you want to use 64-bit Python, you will need
+to build a 64-bit version of the library.
 
-##### Linux
+Linux
+=====
 
-Download [ta-lib-0.4.0-src.tar.gz](http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz) and:
-```
-$ untar and cd
-$ ./configure --prefix=/usr
-$ make
-$ sudo make install
-```
+Download `ta-lib-0.4.0-src.tar.gz <http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz>`_ and:
+
+.. code:: console
+
+    $ untar and cd
+    $ ./configure --prefix=/usr
+    $ make
+    $ sudo make install
