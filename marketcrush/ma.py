@@ -7,6 +7,7 @@ Cleanow.
 import logging
 import numpy as np
 import pandas as pd
+from collections import deque
 import talib
 from marketcrush.utils import moving_average, generate_signals, filter_signals
 
@@ -66,10 +67,10 @@ def exit_trades(signals, price_df, config):
                     timeperiod=config.atr_stops_period)
     log.info('Starting to calculate profit/loss')
     price_df['atr'] = atr
-    entries = []
-    exits = []
-    profits = []
-    units = []
+    entries = np.zeros_like(atr)
+    exits = np.zeros_like(atr)
+    profits = np.zeros_like(atr)
+    units = np.zeros_like(atr)
     long_exit = 0
     short_exit = 0
 
@@ -80,31 +81,23 @@ def exit_trades(signals, price_df, config):
     for i, s in enumerate(signals):
         if np.isnan(price_df.ix[i, ['atr']].values[0]) or i < config.filter_sp:
             signals[i] = 0
-            entries.append(0)
-            exits.append(0)
-            profits.append(0)
-            units.append(0)
             continue
         if (s > 0) and (long_exit <= i) and (short_exit <= i):
             long_exit, profit, unit = longs_exit_trailing_atr(
                 price_df, i, s, config)
-            entries.append(i)
-            exits.append(long_exit)
-            profits.append(profit)
-            units.append(unit)
+            entries[i] = i
+            exits[i] = long_exit
+            profits[i] = profit
+            units[i] = unit
         elif (s < 0) and (short_exit <= i) and (long_exit <= i):
             short_exit, profit, unit = shorts_exit_trailing_atr(
                 price_df, i, s, config)
-            entries.append(i)
-            exits.append(short_exit)
-            profits.append(profit)
-            units.append(unit)
+            entries[i] = i
+            exits[i] = long_exit
+            profits[i] = profit
+            units[i] = unit
         else:
             signals[i] = 0
-            entries.append(0)
-            exits.append(0)
-            profits.append(0)
-            units.append(0)
 
     exits_df = pd.DataFrame({'entries': entries,
                              'exits': exits,
