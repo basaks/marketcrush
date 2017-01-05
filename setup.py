@@ -14,12 +14,19 @@ requirements = [
     'wheel >= 0.29.0',
     'matplotlib >= 1.5.1',
     'bumpversion >= 0.5.3',
-    'Sphinx >= 1.4.8',
     'PyYAML >= 3.11',
     # 'zipline >= 1.0.2',
     'pandas >= 0.17.1',
     'TA-lib == 0.4.10'
 ]
+
+extras_requirements = {
+        'dev': [
+            'sphinx',
+            'ghp-import',
+            'sphinxcontrib-programoutput'
+        ]
+    }
 
 test_requirements = [
     'pytest',
@@ -49,6 +56,7 @@ setup(
     },
     include_package_data=True,
     install_requires=requirements,
+    extras_require=extras_requirements,
     license="Apache Software License 2.0",
     zip_safe=False,
     keywords='marketcrush',

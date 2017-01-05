@@ -25,7 +25,7 @@ before_install:
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
-    - python setup.py install
+    - pip install -e .
     - pip install -U pytest pytest-cov coverage codecov tox flake8
 
 # command to run tests, e.g. python setup.py test
@@ -44,3 +44,12 @@ deploy:
     tags: true
     repo: basaks/marketcrush
     condition: $TOXENV == py27
+
+cache:
+  - apt
+  - pip
+  - directories:
+    - $HOME/.cache/pip
+
+after_success:
+  - codecov
