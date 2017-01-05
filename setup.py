@@ -17,7 +17,8 @@ requirements = [
     'Sphinx >= 1.4.8',
     'PyYAML >= 3.11',
     # 'zipline >= 1.0.2',
-    'TA-lib==0.4.10'
+    'pandas >= 0.17.1',
+    'TA-lib == 0.4.10'
 ]
 
 test_requirements = [
