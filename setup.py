@@ -38,12 +38,12 @@ setup(
     url='https://github.com/basaks/marketcrush',
     packages=[
         'marketcrush',
+        'marketcrush.scripts',
     ],
-    package_dir={'marketcrush':
-                 'marketcrush'},
+    package_dir={'marketcrush': 'marketcrush'},
     entry_points={
         'console_scripts': [
-            'marketcrush=marketcrush.cli:main'
+            'marketcrush=marketcrush.scripts.trend_filter:cli'
         ]
     },
     include_package_data=True,
