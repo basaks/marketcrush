@@ -22,3 +22,5 @@ strategy:
     # movement of the contract
     point_value: 100
 
+output:
+    file: output.csv

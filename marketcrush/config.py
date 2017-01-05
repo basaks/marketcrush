@@ -26,6 +26,4 @@ class Config:
         self.atr_stops_period = self.strategy['atr_stops_period']
         self.commission = self.strategy['commission']
         self.point_value = self.strategy['point_value']
-
-
-
+        self.output_file = s['output']['file']

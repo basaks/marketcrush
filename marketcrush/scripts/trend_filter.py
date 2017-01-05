@@ -27,5 +27,4 @@ def trend_follower(config_file):
     cfg = config.Config(config_file)
     nifty = load_data(config_file)
     final_df = ma_strategy(data_frame=nifty, config=cfg)
-    print(final_df.head())
-    print(final_df.sum())
+    final_df.to_csv(cfg.output_file)
