@@ -36,4 +36,6 @@ def test_command_line_interface():
     assert 'trend_follower' in result.output
     help_result = runner.invoke(trend_filter.trend_follower, ['--help'])
     assert help_result.exit_code == 0
-    assert '--help  Show this message and exit.' in help_result.output
+    print(help_result.output)
+    assert '--help                   Show this message and exit.' \
+           in help_result.output
