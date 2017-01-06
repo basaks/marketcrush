@@ -7,7 +7,6 @@ Cleanow.
 import logging
 import numpy as np
 import pandas as pd
-from collections import deque
 import talib
 from marketcrush.utils import moving_average, generate_signals, filter_signals
 
@@ -17,7 +16,7 @@ log.setLevel(logging.INFO)
 
 def generate_filtered_trading_signals(data_frame, config):
     log.info('Started signal calculation')
-    close = pd.DataFrame({'close': data_frame['close']})
+    close = data_frame['close'].values
     ma_fp = moving_average(close, config.short_tp)
     ma_sp = moving_average(close, config.long_tp)
     ma_d_fp = moving_average(close, config.filter_fp)
@@ -79,7 +78,7 @@ def exit_trades(signals, price_df, config):
 
     # TODO: keep track of existing position with a state variable
     for i, s in enumerate(signals):
-        if np.isnan(price_df.ix[i, ['atr']].values[0]) or i < config.filter_sp:
+        if i < config.filter_sp or np.isnan(price_df.ix[i, ['atr']].values[0]):
             signals[i] = 0
             continue
         if (s > 0) and (long_exit <= i) and (short_exit <= i):
@@ -88,14 +87,14 @@ def exit_trades(signals, price_df, config):
             entries[i] = i
             exits[i] = long_exit
             profits[i] = profit
-            units[i] = unit
+            units[i:long_exit] = unit
         elif (s < 0) and (short_exit <= i) and (long_exit <= i):
             short_exit, profit, unit = shorts_exit_trailing_atr(
                 price_df, i, s, config)
             entries[i] = i
             exits[i] = long_exit
             profits[i] = profit
-            units[i] = unit
+            units[i:short_exit] = unit
         else:
             signals[i] = 0
 

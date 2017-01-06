@@ -7,7 +7,13 @@ from talib import MA
 
 
 def moving_average(data, tp=14):
-    return MA(np.array(data['close']), timeperiod=tp)
+    """
+    :param data: ndarray
+        data for MA
+    :param tp: int
+        time period for MA
+    """
+    return MA(data, timeperiod=tp)
 
 
 def generate_signals(fast_ma, slow_ma):
