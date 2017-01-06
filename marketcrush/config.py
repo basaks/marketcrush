@@ -15,7 +15,6 @@ class Config:
             s = yaml.load(f)
         self.data_path = s['data'][0]['path']
         self.strategy = s['strategy']
-        self.point_value = self.strategy['point_value']
         self.short_tp = self.strategy['time_periods']['short_tp']
         self.long_tp = self.strategy['time_periods']['long_tp']
         self.filter_fp = self.strategy['time_periods']['filter_fp']
