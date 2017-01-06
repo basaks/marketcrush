@@ -51,7 +51,7 @@ setup(
     package_dir={'marketcrush': 'marketcrush'},
     entry_points={
         'console_scripts': [
-            'marketcrush=marketcrush.scripts.trend_filter:cli'
+            'marketcrush=marketcrush.scripts.backtest:cli'
         ]
     },
     include_package_data=True,

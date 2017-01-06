@@ -5,11 +5,11 @@ Usage
 Running
 -------
 
-Here is an example of running the `marketcrush` `trend_follower` algo:
+Here is an example of running the `marketcrush` backtest:
 
 .. code:: console
 
-  $ marketcrush trend_follower configs/nifty.yaml
+  $ marketcrush backtest configs/nifty.yaml
 
 Breaking this down,
 

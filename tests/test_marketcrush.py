@@ -10,7 +10,7 @@ Tests for `marketcrush` module.
 
 import pytest
 from click.testing import CliRunner
-from marketcrush.scripts import trend_filter
+from marketcrush.scripts import backtest
 
 
 @pytest.fixture
@@ -31,11 +31,10 @@ def test_content(response):
 
 def test_command_line_interface():
     runner = CliRunner()
-    result = runner.invoke(trend_filter.cli)
+    result = runner.invoke(backtest.cli)
     assert result.exit_code == 0
-    assert 'trend_follower' in result.output
-    help_result = runner.invoke(trend_filter.trend_follower, ['--help'])
+    assert 'backtest' in result.output
+    help_result = runner.invoke(backtest.backtest, ['--help'])
     assert help_result.exit_code == 0
-    print(help_result.output)
     assert '--help                   Show this message and exit.' \
            in help_result.output

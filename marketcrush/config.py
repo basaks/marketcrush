@@ -15,4 +15,5 @@ class Config:
             s = yaml.load(f)
         self.data_path = s['data'][0]['path']
         self.strategy = s['strategy']
+        self.strategy_parameters = s['parameters']
         self.output_file = s['output']['file']

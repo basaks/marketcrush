@@ -6,7 +6,7 @@ from marketcrush import strategies
 def test_generate_filtered_trading_signals(gbm, config_test):
     df = pd.DataFrame({'close': gbm})
     trender = strategies.TrendFollowing(**config_test.strategy)
-    filtered_signals = trender.generate_filtered_trading_signals(df)
+    filtered_signals = trender.enter_trades(df)
     assert np.max(filtered_signals) == 1
     assert np.min(filtered_signals) == -1
 

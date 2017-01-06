@@ -3,7 +3,7 @@ import click
 import logging
 import pandas as pd
 from marketcrush import config
-from marketcrush.strategies import TrendFollowing
+from marketcrush.strategies import strategies
 from marketcrush import logger
 
 log = logging.getLogger(__name__)
@@ -30,11 +30,11 @@ def cli(verbosity):
 @click.argument('config_file')
 @click.option('-d', '--day_trade', type=bool, default=False,
               help='whether to use day trade criteria or not. ')
-def trend_follower(config_file, day_trade):
+def backtest(config_file, day_trade):
     cfg = config.Config(config_file)
     cfg.day_trade = day_trade
     nifty = load_data(config_file)
-    trender = TrendFollowing(**cfg.strategy)
+    trender = strategies[cfg.strategy](**cfg.strategy_parameters)
     final_df = trender.backtest(data_frame=nifty)
     final_df.to_csv(cfg.output_file)
     print(final_df.sum())

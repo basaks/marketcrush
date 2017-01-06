@@ -1,0 +1,26 @@
+
+data:
+    - path: ~/temp/market_data/nifty1min.csv
+
+strategy: ma_crossover
+
+parameters:
+    short_tp: 25  # MA fast period
+    long_tp: 50 # MA slow period
+    # The strategy does not risk more than 20 bps per trade
+    risk_factor: 0.002  # 20 bps
+    initial_cap: 1000000.0
+    # exit position if price falls below this fraction X atr from
+    # best position value
+    atr_exit_fraction: 3.0
+    atr_stops_period: 25  # atr lookback period
+    show_plot: False
+    max_hold_time: 300  # minutes, not used yet
+    commission: 0.0001  # 1 bps
+    # point value of future cotract, i.e., profit or loss for one unit of price
+    # movement of the contract
+    point_value: 100
+    day_trade: False
+
+output:
+    file: output.csv

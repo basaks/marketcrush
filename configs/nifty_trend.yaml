@@ -2,7 +2,9 @@
 data:
     - path: ~/temp/market_data/nifty1min.csv
 
-strategy:
+strategy: trend_follow
+
+parameters:
     short_tp: 25  # MA fast period
     long_tp: 50 # MA slow period
     filter_fp: 200  # filter fast period
