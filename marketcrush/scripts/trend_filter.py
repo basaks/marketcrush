@@ -3,7 +3,7 @@ import click
 import logging
 import pandas as pd
 from marketcrush import config
-from marketcrush.ma import ma_strategy
+from marketcrush.strategies import TrendFollowing
 from marketcrush import logger
 
 log = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ def trend_follower(config_file, day_trade):
     cfg = config.Config(config_file)
     cfg.day_trade = day_trade
     nifty = load_data(config_file)
-    final_df = ma_strategy(data_frame=nifty, config=cfg)
+    trender = TrendFollowing(**cfg.strategy)
+    final_df = trender.backtest(data_frame=nifty)
     final_df.to_csv(cfg.output_file)
     print(final_df.sum())

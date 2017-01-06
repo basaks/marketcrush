@@ -37,16 +37,18 @@ def gbm():
 def config_test(random_filename):
     class Config:
         def __init__(self):
-            self.short_tp = 25
-            self.long_tp = 50
-            self.filter_fp = 100
-            self.filter_sp = 200
-            self.risk_factor = 0.002
-            self.initial_cap = 1e6
-            self.atr_exit_fraction = 3
-            self.atr_stops_period = 20
-            self.commission = 0.001
-            self.point_value = 10
+            self.strategy = {
+                'short_tp': 25,
+                'long_tp': 50,
+                'filter_fp': 100,
+                'filter_sp': 200,
+                'risk_factor': 0.002,
+                'initial_cap': 1e6,
+                'atr_exit_fraction': 3,
+                'atr_stops_period': 20,
+                'commission': 0.001,
+                'point_value': 10
+                }
             self.output_file = random_filename
     return Config()
 

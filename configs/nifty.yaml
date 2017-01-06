@@ -3,11 +3,10 @@ data:
     - path: ~/temp/market_data/nifty1min.csv
 
 strategy:
-    time_periods:
-        short_tp: 25  # MA fast period
-        long_tp: 50 # MA slow period
-        filter_fp: 200  # filter fast period
-        filter_sp: 400  # filter slow period
+    short_tp: 25  # MA fast period
+    long_tp: 50 # MA slow period
+    filter_fp: 200  # filter fast period
+    filter_sp: 400  # filter slow period
     # The strategy does not risk more than 20 bps per trade
     risk_factor: 0.002  # 20 bps
     initial_cap: 1000000.0
