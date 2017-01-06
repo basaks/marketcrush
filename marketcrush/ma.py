@@ -29,7 +29,7 @@ def generate_filtered_trading_signals(data_frame, config):
     return filtered_signals
 
 
-def longs_exit_trailing_atr(price, idx, s, config):
+def _exit_trailing_atr(price, idx, s, config):
     # TODO: introduce max hold time
     settles = price.close[idx:]
     atr = price.atr[idx:]
@@ -38,26 +38,11 @@ def longs_exit_trailing_atr(price, idx, s, config):
     unit = np.round(config.risk_factor *
                     config.initial_cap/(atr[0] * config.point_value))
     for i, p in enumerate(settles):
-        if p > m:
+        if (p - m)*s > 0:  # update best position
             m = p
-        if m - p > config.atr_exit_fraction * atr[i]:
-            return i + idx, p - settles[0], unit
-    return i + idx, p - settles[0], unit
-
-
-def shorts_exit_trailing_atr(price, idx, s, config):
-    # TODO: combine with longs_exit_trailing_atr function
-    settles = price.close[idx:]
-    atr = price.atr[idx:]
-    m = settles[0]
-    unit = np.round(config.risk_factor *
-                    config.initial_cap/(atr[0] * config.point_value))
-    for i, p in enumerate(settles):
-        if p < m:
-            m = p
-        if p - m > config.atr_exit_fraction * atr[i]:
-            return i + idx, settles[0] - p, unit
-    return i + idx, settles[0] - p, unit
+        if (m - p)*s > config.atr_exit_fraction * atr[i]:
+            return i + idx, (p - settles[0])*s, unit
+    return i + idx, (p - settles[0]) * s, unit
 
 
 def exit_trades(signals, price_df, config):
@@ -70,31 +55,22 @@ def exit_trades(signals, price_df, config):
     exits = np.zeros_like(atr)
     profits = np.zeros_like(atr)
     units = np.zeros_like(atr)
-    long_exit = 0
-    short_exit = 0
+    _exit = 0
 
     # Calculate profit, entry/exit (hold time) based on atr criteria
     # In this loop we make sure there are no overlapping trades
 
-    # TODO: keep track of existing position with a state variable
     for i, s in enumerate(signals):
         if i < config.filter_sp or np.isnan(price_df.ix[i, ['atr']].values[0]):
             signals[i] = 0
             continue
-        if (s > 0) and (long_exit <= i) and (short_exit <= i):
-            long_exit, profit, unit = longs_exit_trailing_atr(
+        if s and _exit <= i:
+            _exit, profit, unit = _exit_trailing_atr(
                 price_df, i, s, config)
             entries[i] = i
-            exits[i] = long_exit
+            exits[i] = _exit
             profits[i] = profit
-            units[i:long_exit] = unit
-        elif (s < 0) and (short_exit <= i) and (long_exit <= i):
-            short_exit, profit, unit = shorts_exit_trailing_atr(
-                price_df, i, s, config)
-            entries[i] = i
-            exits[i] = long_exit
-            profits[i] = profit
-            units[i:short_exit] = unit
+            units[i:_exit] = unit
         else:
             signals[i] = 0
 
