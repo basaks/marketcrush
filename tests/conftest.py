@@ -40,8 +40,6 @@ def config_test(random_filename):
             self.strategy = {
                 'short_tp': 25,
                 'long_tp': 50,
-                'filter_fp': 100,
-                'filter_sp': 200,
                 'risk_factor': 0.002,
                 'initial_cap': 1e6,
                 'atr_exit_fraction': 3,
