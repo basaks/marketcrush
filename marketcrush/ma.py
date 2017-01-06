@@ -11,7 +11,6 @@ import talib
 from marketcrush.utils import moving_average, generate_signals, filter_signals
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
 
 
 def generate_filtered_trading_signals(data_frame, config):
@@ -46,15 +45,24 @@ def _exit_trailing_atr(price, idx, s, config):
 
 
 def exit_trades(signals, price_df, config):
+    """
+    This function applies the exit criteria.
+    :param signals:
+    :param price_df:
+    :param config:
+    :return:
+    """
     atr = talib.ATR(np.array(price_df['high']), np.array(price_df['low']),
                     np.array(price_df['close']),
                     timeperiod=config.atr_stops_period)
     log.info('Starting to calculate profit/loss')
     price_df['atr'] = atr
+    price = price_df['close'].values
     entries = np.zeros_like(atr)
     exits = np.zeros_like(atr)
     profits = np.zeros_like(atr)
     units = np.zeros_like(atr)
+    commission = np.zeros_like(atr)
     _exit = 0
 
     # Calculate profit, entry/exit (hold time) based on atr criteria
@@ -69,7 +77,9 @@ def exit_trades(signals, price_df, config):
                 price_df, i, s, config)
             entries[i] = i
             exits[i] = _exit
+            # subtract commision from profit
             profits[i] = profit
+            commission[i] = (unit*(price[i] + price[_exit]))*config.commission
             units[i:_exit] = unit
         else:
             signals[i] = 0
@@ -77,6 +87,7 @@ def exit_trades(signals, price_df, config):
     exits_df = pd.DataFrame({'entries': entries,
                              'exits': exits,
                              'profits': profits,
+                             'commission': commission,
                              'units': units,
                              'signal': signals},
                             index=price_df.index)

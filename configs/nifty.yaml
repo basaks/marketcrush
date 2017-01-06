@@ -5,7 +5,7 @@ data:
 strategy:
     time_periods:
         short_tp: 25  # MA fast period
-        long_tp: 50  # MA slow period
+        long_tp: 50 # MA slow period
         filter_fp: 200  # filter fast period
         filter_sp: 400  # filter slow period
     # The strategy does not risk more than 20 bps per trade
@@ -17,10 +17,11 @@ strategy:
     atr_stops_period: 25  # atr lookback period
     show_plot: False
     max_hold_time: 300  # minutes, not used yet
-    commission: 0.001  # 10 bps, not used yet
+    commission: 0.0001  # 1 bps
     # point value of future cotract, i.e., profit or loss for one unit of price
     # movement of the contract
     point_value: 100
+    day_trade: False
 
 output:
     file: output.csv

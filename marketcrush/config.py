@@ -26,3 +26,5 @@ class Config:
         self.commission = self.strategy['commission']
         self.point_value = self.strategy['point_value']
         self.output_file = s['output']['file']
+        self.max_hold_time = self.strategy['max_hold_time']
+        self.day_trade =self.strategy['day_trade']

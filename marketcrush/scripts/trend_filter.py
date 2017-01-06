@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 import click
+import logging
 import pandas as pd
 from marketcrush import config
 from marketcrush.ma import ma_strategy
 from marketcrush import logger
 
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
+
 
 def load_data(config_file):
+    log.info('Loading data from csv')
     cfg = config.Config(config_file)
     nifty = pd.read_csv(cfg.data_path)
     nifty.index = nifty['time']
@@ -23,8 +28,12 @@ def cli(verbosity):
 
 @cli.command()
 @click.argument('config_file')
-def trend_follower(config_file):
+@click.option('-d', '--day_trade', type=bool, default=False,
+              help='whether to use day trade criteria or not. ')
+def trend_follower(config_file, day_trade):
     cfg = config.Config(config_file)
+    cfg.day_trade = day_trade
     nifty = load_data(config_file)
     final_df = ma_strategy(data_frame=nifty, config=cfg)
     final_df.to_csv(cfg.output_file)
+    print(final_df.sum())
