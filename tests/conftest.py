@@ -3,7 +3,11 @@ import os
 import random
 import string
 import numpy as np
+import pandas as pd
+import datetime
 import pytest
+
+np.random.seed(1)
 
 
 @pytest.fixture
@@ -16,7 +20,7 @@ def random_filename(tmpdir_factory):
 
 @pytest.fixture
 def gbm():
-    T = 20
+    T = 50
     mu = 0.01
     sigma = 0.1
     S0 = 20
@@ -35,8 +39,8 @@ def config_test(random_filename):
         def __init__(self):
             self.short_tp = 25
             self.long_tp = 50
-            self.filter_fp = 75
-            self.filter_sp = 150
+            self.filter_fp = 100
+            self.filter_sp = 200
             self.risk_factor = 0.002
             self.initial_cap = 1e6
             self.atr_exit_fraction = 3
@@ -45,3 +49,13 @@ def config_test(random_filename):
             self.point_value = 10
             self.output_file = random_filename
     return Config()
+
+
+@pytest.fixture
+def ohlc_data(gbm):
+    price = pd.Series(gbm, index=pd.date_range(
+        start=datetime.datetime(2000, 1, 1),
+        periods=len(gbm),
+        freq='1H'))
+    ohlc = price.resample(rule='4H', how='ohlc')
+    return ohlc
