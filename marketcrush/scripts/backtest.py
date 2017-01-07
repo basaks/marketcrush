@@ -14,7 +14,7 @@ def load_data(config_file):
     log.info('Loading data from csv')
     cfg = config.Config(config_file)
     nifty = pd.read_csv(cfg.data_path)
-    nifty.index = nifty['time']
+    nifty.index = pd.DatetimeIndex(nifty['time'])
     return nifty[['open', 'high', 'low', 'close', 'volume']]
 
 
