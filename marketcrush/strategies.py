@@ -263,17 +263,16 @@ class MACrossOverDayTrade(Strategy):
         return ma_t.backtest(data_frame=df)
 
 
-class MACrossOverResolution:
+def resolve_ma_crossover_class(day_trade=False, *args, **kwargs):
     """
-    Intermediate resolution class for dynamically choosing which class to use
+    dynamically choose which class to use
     """
-    def __new__(cls, day_trade=False, *args, **kwargs):
-        if day_trade:
-            return MACrossOverDayTrade(*args, **kwargs)
-        else:
-            return MACrossOver(*args, **kwargs)
+    if day_trade:
+        return MACrossOverDayTrade(*args, **kwargs)
+    else:
+        return MACrossOver(*args, **kwargs)
 
 
 strategies = {'ma_crossover': MACrossOver,
-              'ma_crossover_daily': MACrossOverResolution,
+              'ma_crossover_daily': resolve_ma_crossover_class,
               'trend_follow': TrendFollowing}
