@@ -1,6 +1,6 @@
 
 data:
-    - path: ~/temp/market_data/nifty1min.csv
+    - path: ~/temp/market_data/nifty1min_med.csv
 
 strategy: ma_crossover
 
@@ -20,7 +20,6 @@ parameters:
     # point value of future cotract, i.e., profit or loss for one unit of price
     # movement of the contract
     point_value: 100
-    day_trade: False
 
 output:
     file: output.csv

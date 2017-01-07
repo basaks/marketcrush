@@ -20,7 +20,6 @@ def test_generate_filtered_trading_signals(gbm, config_test, strategy):
 def test_ma_strategy(ohlc_data, config_test, strategy):
     strat = strategy(**config_test.strategy)
     profit_df = strat.backtest(ohlc_data)
-    print(profit_df.sum()['total_profit'])
     assert profit_df.sum()['total_profit'] > - 1.0e5
 
 

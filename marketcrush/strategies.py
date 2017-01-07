@@ -8,6 +8,7 @@ from abc import ABCMeta, abstractmethod
 import logging
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 import talib
 from marketcrush.utils import moving_average, generate_signals, filter_signals
 
@@ -30,7 +31,7 @@ class Strategy:
         pass
 
 
-class MovingAverageCrossOver(Strategy):
+class MACrossOver(Strategy):
     def __init__(self,
                  short_tp=15,
                  long_tp=30,
@@ -42,7 +43,6 @@ class MovingAverageCrossOver(Strategy):
                  max_hold_time=300,
                  commission=0.0001,
                  point_value=100,
-                 day_trade=False
                  ):
         self.short_tp = short_tp
         self.long_tp = long_tp
@@ -54,7 +54,6 @@ class MovingAverageCrossOver(Strategy):
         self.max_hold_time = max_hold_time
         self.commission = commission
         self.point_value = point_value
-        self.day_trade = day_trade
         self.signals = None  # signals not computed
 
     def enter_trades(self, data_frame):
@@ -87,9 +86,10 @@ class MovingAverageCrossOver(Strategy):
     def exit_trades(self, signals, price_df):
         """
         This function applies the exit criteria.
-        :param signals:
+        :param signals: ndarray
+            the signals array
         :param price_df:
-        :param config:
+            ohlc dataframe
         :return:
         """
         atr = talib.ATR(np.array(price_df['high']), np.array(price_df['low']),
@@ -150,7 +150,7 @@ class MovingAverageCrossOver(Strategy):
         return exits_df
 
 
-class TrendFollowing(MovingAverageCrossOver):
+class TrendFollowing(MACrossOver):
     def __init__(self,
                  short_tp=15,
                  long_tp=30,
@@ -164,7 +164,6 @@ class TrendFollowing(MovingAverageCrossOver):
                  max_hold_time=300,
                  commission=0.0001,
                  point_value=100,
-                 day_trade=False
                  ):
         super(TrendFollowing, self).__init__(
                             short_tp=short_tp,
@@ -177,7 +176,7 @@ class TrendFollowing(MovingAverageCrossOver):
                             max_hold_time=max_hold_time,
                             commission=commission,
                             point_value=point_value,
-                            day_trade=day_trade)
+                            )
         self.filter_fp = filter_fp
         self.filter_sp = filter_sp
         self.signals = None  # no signals computed
@@ -208,5 +207,73 @@ class TrendFollowing(MovingAverageCrossOver):
         return filtered_signals
 
 
-strategies = {'ma_crossover': MovingAverageCrossOver,
+class MACrossOverDayTrade(Strategy):
+    def __init__(self,
+                 short_tp=15,
+                 long_tp=30,
+                 risk_factor=0.002,
+                 initial_cap=1000000.0,
+                 atr_exit_fraction=3.0,
+                 atr_stops_period=15,
+                 show_plot=False,
+                 max_hold_time=300,
+                 commission=0.0001,
+                 point_value=100,
+                 ):
+        self.short_tp = short_tp
+        self.long_tp = long_tp
+        self.risk_factor = risk_factor
+        self.initial_cap = initial_cap
+        self.atr_exit_fraction = atr_exit_fraction
+        self.atr_stops_period = atr_stops_period
+        self.show_plot = show_plot
+        self.max_hold_time = max_hold_time
+        self.commission = commission
+        self.point_value = point_value
+        self.signals = None  # signals not computed
+
+    def exit_trades(self, *args, **kwargs):
+        pass
+
+    def enter_trades(self, *args, **kwargs):
+        pass
+
+    def backtest(self, data_frame):
+        dfs = data_frame.groupby(pd.TimeGrouper(freq='D'))
+        # only choose trading days
+        dfs = [(d, df) for (d, df) in dfs if df.shape[0]]
+        exit_dfs = Parallel(n_jobs=-2, verbose=50)(
+            delayed(self._compute_daily_ma)(daily_data) for daily_data in dfs)
+        return pd.concat(exit_dfs)
+
+    def _compute_daily_ma(self, daily_data):
+        date, df = daily_data
+        log.info('Calculating trades for day {}'.format(date.date()))
+        ma_t = MACrossOver(short_tp=self.short_tp,
+                           long_tp=self.long_tp,
+                           risk_factor=self.risk_factor,
+                           initial_cap=self.initial_cap,
+                           atr_exit_fraction=self.atr_exit_fraction,
+                           atr_stops_period=self.atr_stops_period,
+                           show_plot=self.show_plot,
+                           max_hold_time=self.max_hold_time,
+                           commission=self.commission,
+                           point_value=self.point_value,
+                           )
+        return ma_t.backtest(data_frame=df)
+
+
+class MACrossOverResolution:
+    """
+    Intermediate resolution class for dynamically choosing which class to use
+    """
+    def __new__(cls, day_trade=False, *args, **kwargs):
+        if day_trade:
+            return MACrossOverDayTrade(*args, **kwargs)
+        else:
+            return MACrossOver(*args, **kwargs)
+
+
+strategies = {'ma_crossover': MACrossOver,
+              'ma_crossover_daily': MACrossOverResolution,
               'trend_follow': TrendFollowing}

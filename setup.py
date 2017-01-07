@@ -17,7 +17,8 @@ requirements = [
     'PyYAML >= 3.11',
     # 'zipline >= 1.0.2',
     'pandas >= 0.17.1',
-    'TA-lib == 0.4.10'
+    'TA-lib == 0.4.10',
+    'joblib >= 0.10.3'
 ]
 
 extras_requirements = {
