@@ -9,6 +9,9 @@ marketcrush
 .. image:: https://img.shields.io/travis/basaks/marketcrush.svg
         :target: https://travis-ci.org/basaks/marketcrush
 
+.. image:: https://ci.appveyor.com/api/projects/status/github/basaks/marketcrush?branch=master&svg=true
+        :target: https://ci.appveyor.com/project/basaks/marketcrush
+
 .. image:: https://readthedocs.org/projects/marketcrush/badge/?version=latest
         :target: https://marketcrush.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
