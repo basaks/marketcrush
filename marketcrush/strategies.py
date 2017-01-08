@@ -76,6 +76,8 @@ class MACrossOver(Strategy):
         # TODO: update units with current portfolio value
         unit = np.round(self.risk_factor *
                         self.initial_cap / (atr[0] * self.point_value))
+
+        # TODO: vectorise this loop
         for i, p in enumerate(settles):
             if (p - m) * s > 0:  # update best position
                 m = p
@@ -120,7 +122,7 @@ class MACrossOver(Strategy):
                 profits[i] = profit
                 commission[i] = (unit * (price[i] +
                                          price[_exit])) * self.commission
-                units[i:_exit] = unit
+                units[i] = unit
             else:
                 signals[i] = 0
 
@@ -179,7 +181,6 @@ class TrendFollowing(MACrossOver):
                             )
         self.filter_fp = filter_fp
         self.filter_sp = filter_sp
-        self.signals = None  # no signals computed
 
     def enter_trades(self, data_frame):
         """
@@ -230,7 +231,6 @@ class MACrossOverDayTrade(Strategy):
         self.max_hold_time = max_hold_time
         self.commission = commission
         self.point_value = point_value
-        self.signals = None  # signals not computed
 
     def exit_trades(self, *args, **kwargs):
         pass
@@ -242,13 +242,15 @@ class MACrossOverDayTrade(Strategy):
         dfs = data_frame.groupby(pd.TimeGrouper(freq='D'))
         # only choose trading days
         dfs = [(d, df) for (d, df) in dfs if df.shape[0]]
-        exit_dfs = Parallel(n_jobs=-2, verbose=50)(
-            delayed(self._compute_daily_ma)(daily_data) for daily_data in dfs)
+        exit_dfs = Parallel(n_jobs=-1, verbose=50)(
+            delayed(self._compute_daily_performance)(daily_data)
+            for daily_data in dfs)
         return pd.concat(exit_dfs)
 
-    def _compute_daily_ma(self, daily_data):
+    def _compute_daily_performance(self, daily_data):
         date, df = daily_data
-        log.info('Calculating trades for day {}'.format(date.date()))
+        log.info('Calculating trades for day {} for {}'.format(
+            date.date(), self.__class__.__name__))
         ma_t = MACrossOver(short_tp=self.short_tp,
                            long_tp=self.long_tp,
                            risk_factor=self.risk_factor,
@@ -263,7 +265,58 @@ class MACrossOverDayTrade(Strategy):
         return ma_t.backtest(data_frame=df)
 
 
-def resolve_ma_crossover_class(day_trade=False, *args, **kwargs):
+class TrendFollowerDayTrade(MACrossOverDayTrade):
+
+    def __init__(self,
+                 short_tp=15,
+                 long_tp=30,
+                 filter_fp=30,
+                 filter_sp=60,
+                 risk_factor=0.002,
+                 initial_cap=1000000.0,
+                 atr_exit_fraction=3.0,
+                 atr_stops_period=15,
+                 show_plot=False,
+                 max_hold_time=300,
+                 commission=0.0001,
+                 point_value=100,
+                 ):
+        super(TrendFollowerDayTrade, self).__init__(
+            short_tp=short_tp,
+            long_tp=long_tp,
+            risk_factor=risk_factor,
+            initial_cap=initial_cap,
+            atr_exit_fraction=atr_exit_fraction,
+            atr_stops_period=atr_stops_period,
+            show_plot=show_plot,
+            max_hold_time=max_hold_time,
+            commission=commission,
+            point_value=point_value)
+        self.filter_fp = filter_fp
+        self.filter_sp = filter_sp
+
+    def _compute_daily_performance(self, daily_data):
+        date, df = daily_data
+        log.info('Calculating trades for day {} for {}'.format(
+            date.date(), self.__class__.__name__))
+        trender = TrendFollowing(
+            short_tp=self.short_tp,
+            long_tp=self.long_tp,
+            filter_fp=self.filter_fp,
+            filter_sp=self.filter_sp,
+            risk_factor=self.risk_factor,
+            initial_cap=self.initial_cap,
+            atr_exit_fraction=self.atr_exit_fraction,
+            atr_stops_period=self.atr_stops_period,
+            show_plot=self.show_plot,
+            max_hold_time=self.max_hold_time,
+            commission=self.commission,
+            point_value=self.point_value,
+            )
+        return trender.backtest(data_frame=df)
+
+
+def resolve_ma_crossover(day_trade=False, *args, **kwargs):
     """
     dynamically choose which class to use
     """
@@ -273,6 +326,17 @@ def resolve_ma_crossover_class(day_trade=False, *args, **kwargs):
         return MACrossOver(*args, **kwargs)
 
 
+def resolve_trend_follower(day_trade=False, *args, **kwargs):
+    """
+    dynamically choose which class to use
+    """
+    if day_trade:
+        return TrendFollowerDayTrade(*args, **kwargs)
+    else:
+        return TrendFollowing(*args, **kwargs)
+
+
 strategies = {'ma_crossover': MACrossOver,
-              'ma_crossover_daily': resolve_ma_crossover_class,
-              'trend_follow': TrendFollowing}
+              'ma_crossover_daily': resolve_ma_crossover,
+              'trend_follow': TrendFollowing,
+              'trend_daily': resolve_trend_follower,}

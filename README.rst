@@ -18,7 +18,7 @@ marketcrush
      :alt: Updates
 
 
-Futures Backtester Built on Quantopian's Zipline
+A very simple to use backtester.
 
 
 * Free software: Apache Software License 2.0
