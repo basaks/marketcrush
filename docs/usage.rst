@@ -9,7 +9,7 @@ Here is an example of running the `marketcrush` backtest:
 
 .. code:: console
 
-  $ marketcrush backtest configs/nifty.yaml
+  $ marketcrush backtest configs/ma_crossover.yaml
 
 Breaking this down,
 

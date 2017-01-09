@@ -18,7 +18,7 @@ parameters:
     atr_stops_period: 10  # atr lookback period
     show_plot: False
     max_hold_time: 300  # minutes, not used yet
-    commission: 0.0002  # 2 bpsA
+    commission: 0.0002  # 2 bps
     # point value of future cotract, i.e., profit or loss for one unit of price
     # movement of the contract
     point_value: 100
