@@ -91,3 +91,11 @@ Breaking this down,
 - backtest invokes the trend following MA crossover algorithm
 - nifty.yaml is the config file which contains the location of the data file,
   and the strategy parameters
+
+
+Installation
+============
+Once `TA-lib` is installed, to install `marketcrush`, just run from the main directory:
+
+.. code:: console
+    $ python setup.py install
