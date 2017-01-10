@@ -5,6 +5,7 @@ the book Following the Trend: Diversified Managed Futures Trading by Andrew
 Cleanow.
 """
 from abc import ABCMeta, abstractmethod
+import sys
 import logging
 import numpy as np
 import pandas as pd
@@ -242,9 +243,15 @@ class MACrossOverDayTrade(Strategy):
         dfs = data_frame.groupby(pd.TimeGrouper(freq='D'))
         # only choose trading days
         dfs = [(d, df) for (d, df) in dfs if df.shape[0]]
-        exit_dfs = Parallel(n_jobs=-1, verbose=50)(
-            delayed(self._compute_daily_performance)(daily_data)
-            for daily_data in dfs)
+
+        if sys.version_info[0] < 3:
+            exit_dfs = [self._compute_daily_performance(daily_data)
+                        for daily_data in dfs]
+        else:
+            exit_dfs = Parallel(n_jobs=-1, verbose=50)(
+                delayed(self._compute_daily_performance)(daily_data)
+                for daily_data in dfs)
+
         return pd.concat(exit_dfs)
 
     def _compute_daily_performance(self, daily_data):
@@ -339,4 +346,4 @@ def resolve_trend_follower(day_trade=False, *args, **kwargs):
 strategies = {'ma_crossover': MACrossOver,
               'ma_crossover_daily': resolve_ma_crossover,
               'trend_follow': TrendFollowing,
-              'trend_daily': resolve_trend_follower,}
+              'trend_daily': resolve_trend_follower}
