@@ -43,16 +43,14 @@ def returnize0(nd):
     0 implies no change in value.
     @return the return series
     """
+    if isinstance(nd, pd.Series):
+        nd = nd.values
+
     if isinstance(np, np.ndarray):
         ret = np.zeros_like(nd)
         ret[1:] = (nd[1:]/nd[0:-1]) - 1
-
-    elif isinstance(nd, pd.DataFrame):
-        nd = nd.values
-        ret = np.zeros_like(nd)
-        ret[1:] = (nd[1:]/nd[0:-1]) - 1
     else:
-        raise ValueError('nd nust be numpy array or pandas dataframe')
+        raise ValueError('nd must be numpy array or pandas Series')
 
     return ret
 

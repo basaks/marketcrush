@@ -40,7 +40,6 @@ class MACrossOver(Strategy):
                  initial_cap=1000000.0,
                  atr_exit_fraction=3.0,
                  atr_stops_period=15,
-                 show_plot=False,
                  max_hold_time=300,
                  commission=0.0001,
                  point_value=100,
@@ -51,7 +50,6 @@ class MACrossOver(Strategy):
         self.initial_cap = initial_cap
         self.atr_exit_fraction = atr_exit_fraction
         self.atr_stops_period = atr_stops_period
-        self.show_plot = show_plot
         self.max_hold_time = max_hold_time
         self.commission = commission
         self.point_value = point_value
@@ -163,7 +161,6 @@ class TrendFollowing(MACrossOver):
                  initial_cap=1000000.0,
                  atr_exit_fraction=3.0,
                  atr_stops_period=15,
-                 show_plot=False,
                  max_hold_time=300,
                  commission=0.0001,
                  point_value=100,
@@ -175,7 +172,6 @@ class TrendFollowing(MACrossOver):
                             initial_cap=initial_cap,
                             atr_exit_fraction=atr_exit_fraction,
                             atr_stops_period=atr_stops_period,
-                            show_plot=show_plot,
                             max_hold_time=max_hold_time,
                             commission=commission,
                             point_value=point_value,
@@ -217,7 +213,6 @@ class MACrossOverDayTrade(Strategy):
                  initial_cap=1000000.0,
                  atr_exit_fraction=3.0,
                  atr_stops_period=15,
-                 show_plot=False,
                  max_hold_time=300,
                  commission=0.0001,
                  point_value=100,
@@ -228,7 +223,6 @@ class MACrossOverDayTrade(Strategy):
         self.initial_cap = initial_cap
         self.atr_exit_fraction = atr_exit_fraction
         self.atr_stops_period = atr_stops_period
-        self.show_plot = show_plot
         self.max_hold_time = max_hold_time
         self.commission = commission
         self.point_value = point_value
@@ -264,7 +258,6 @@ class MACrossOverDayTrade(Strategy):
                            initial_cap=self.initial_cap,
                            atr_exit_fraction=self.atr_exit_fraction,
                            atr_stops_period=self.atr_stops_period,
-                           show_plot=self.show_plot,
                            max_hold_time=self.max_hold_time,
                            commission=self.commission,
                            point_value=self.point_value,
@@ -283,7 +276,6 @@ class TrendFollowerDayTrade(MACrossOverDayTrade):
                  initial_cap=1000000.0,
                  atr_exit_fraction=3.0,
                  atr_stops_period=15,
-                 show_plot=False,
                  max_hold_time=300,
                  commission=0.0001,
                  point_value=100,
@@ -295,7 +287,6 @@ class TrendFollowerDayTrade(MACrossOverDayTrade):
             initial_cap=initial_cap,
             atr_exit_fraction=atr_exit_fraction,
             atr_stops_period=atr_stops_period,
-            show_plot=show_plot,
             max_hold_time=max_hold_time,
             commission=commission,
             point_value=point_value)
@@ -315,7 +306,6 @@ class TrendFollowerDayTrade(MACrossOverDayTrade):
             initial_cap=self.initial_cap,
             atr_exit_fraction=self.atr_exit_fraction,
             atr_stops_period=self.atr_stops_period,
-            show_plot=self.show_plot,
             max_hold_time=self.max_hold_time,
             commission=self.commission,
             point_value=self.point_value,

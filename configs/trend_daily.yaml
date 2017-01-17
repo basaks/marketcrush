@@ -1,6 +1,7 @@
 
 data:
     - path: ~/temp/market_data/nifty1min.csv
+    - path: ~/temp/market_data/NIFTYBANK1min.csv
 
 strategy: trend_daily
 
@@ -16,7 +17,6 @@ parameters:
     # best position value
     atr_exit_fraction: 3.0
     atr_stops_period: 10  # atr lookback period
-    show_plot: False
     max_hold_time: 300  # minutes, not used yet
     commission: 0.0002  # 2 bps
     # point value of future cotract, i.e., profit or loss for one unit of price
@@ -25,4 +25,6 @@ parameters:
     day_trade: True
 
 output:
-    file: output.csv
+    file: output.xlsx  # has to be .xlsx
+
+show_plot: True

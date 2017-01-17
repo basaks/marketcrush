@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import os
 import click
 import logging
 import pandas as pd
+import matplotlib.pylab as plt
 from marketcrush import config
 from marketcrush.strategies import strategies
 from marketcrush import logger
@@ -9,13 +11,20 @@ from marketcrush import logger
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
+required_columns = ['open', 'high', 'low', 'close']
+
 
 def load_data(config_file):
     log.info('Loading data from csv')
     cfg = config.Config(config_file)
-    nifty = pd.read_csv(cfg.data_path)
-    nifty.index = pd.DatetimeIndex(nifty['time'])
-    return nifty[['open', 'high', 'low', 'close', 'volume']]
+    dfs = []  # list of dataframes with ohlc data for all tickers
+    for p in cfg.data_path:
+        data = pd.read_csv(p['path'])
+        assert {*required_columns}.issubset(data.columns), \
+            'Input data must have {} columns'.format(required_columns)
+        data.index = pd.DatetimeIndex(data['time'])
+        dfs.append(data[['open', 'high', 'low', 'close']])
+    return dfs
 
 
 @click.group()
@@ -33,8 +42,16 @@ def cli(verbosity):
 def backtest(config_file, day_trade):
     cfg = config.Config(config_file)
     cfg.day_trade = day_trade
-    nifty = load_data(config_file)
+    dfs = load_data(config_file)
     trender = strategies[cfg.strategy](**cfg.strategy_parameters)
-    final_df = trender.backtest(data_frame=nifty)
-    final_df.to_csv(cfg.output_file)
-    print(final_df.sum())
+    res = []
+    for df in dfs:
+        res.append(trender.backtest(data_frame=df))
+    final_panel = pd.Panel({os.path.basename(p['path']): df for p, df in
+                            zip(cfg.data_path, res)})
+    profit_series = final_panel.sum(axis=0)['total_profit'].cumsum()
+    final_panel.to_excel(cfg.output_file)
+
+    if cfg.show:
+        profit_series.plot()
+        plt.show()

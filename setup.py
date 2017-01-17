@@ -18,7 +18,8 @@ requirements = [
     # 'zipline >= 1.0.2',
     'pandas >= 0.17.1',
     'TA-lib == 0.4.10',
-    'joblib >= 0.10.3'
+    'joblib >= 0.10.3',
+    'openpyxl==2.4.1'  # for excel file manipulation
 ]
 
 extras_requirements = {
@@ -39,7 +40,7 @@ test_requirements = [
 ]
 setup(
     name='marketcrush',
-    version='0.1.0',
+    version='0.2.0',
     description="Futures Backtester Built on top of Quantopian's Zipline",
     long_description=readme + '\n\n' + history,
     author="Sudipta Basak",

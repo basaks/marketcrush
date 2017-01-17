@@ -13,7 +13,8 @@ class Config:
     def __init__(self, yaml_file):
         with open(yaml_file, 'r') as f:
             s = yaml.load(f)
-        self.data_path = s['data'][0]['path']
+        self.data_path = s['data']
         self.strategy = s['strategy']
         self.strategy_parameters = s['parameters']
         self.output_file = s['output']['file']
+        self.show = s['show_plot']
