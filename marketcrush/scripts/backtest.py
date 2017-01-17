@@ -20,7 +20,7 @@ def load_data(config_file):
     dfs = []  # list of dataframes with ohlc data for all tickers
     for p in cfg.data_path:
         data = pd.read_csv(p['path'])
-        assert {*required_columns}.issubset(data.columns), \
+        assert set(required_columns).issubset(data.columns), \
             'Input data must have {} columns'.format(required_columns)
         data.index = pd.DatetimeIndex(data['time'])
         dfs.append(data[['open', 'high', 'low', 'close']])
