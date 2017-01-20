@@ -34,9 +34,6 @@ Features
 * TODO
 
 
-Installation
-------------
-
 Dependencies
 ============
 
@@ -85,6 +82,11 @@ Here is an example of running the `marketcrush` backtest:
 .. code:: console
 
   $ marketcrush backtest configs/ma_crossover.yaml
+
+or
+
+.. code:: console
+  $ marketcrush backtest configs/trend_daily.yaml
 
 Breaking this down,
 
