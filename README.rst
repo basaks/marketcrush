@@ -159,7 +159,11 @@ To create a `python3` `virtualenv` use the following:
 
 This will create a `python3` `virtualenv` using your system installed `python3` version. If you want to install another `python3` interpreter, `follow this approach <https://github.com/basaks/py36-ubuntu>`_.
 
-To exit your new virtualenv, use `deactivate`.
+To exit your new virtualenv, use `deactivate`:
+
+.. code:: console
+
+  $ deactivate
 
 Switch between enviornments with `workon`
 
