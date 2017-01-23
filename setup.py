@@ -57,6 +57,7 @@ setup(
         ]
     },
     include_package_data=True,
+    setup_requires=['numpy >= 1.12.0'],  # required due to TA-lib
     install_requires=requirements,
     extras_require=extras_requirements,
     license="Apache Software License 2.0",

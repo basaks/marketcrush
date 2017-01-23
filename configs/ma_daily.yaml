@@ -1,6 +1,6 @@
 
 data:
-    - path: ~/temp/market_data/nifty1min.
+    - path: ~/temp/market_data/nifty1min.csv
     - path: ~/temp/market_data/NIFTYBANK1min.csv
 
 strategy: ma_crossover_daily
