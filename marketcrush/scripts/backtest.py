@@ -54,4 +54,7 @@ def backtest(config_file, day_trade):
 
     if cfg.show:
         profit_series.plot()
+        plt.xlabel('Time')
+        plt.ylabel('Profit')
+        plt.legend('Profit')
         plt.show()

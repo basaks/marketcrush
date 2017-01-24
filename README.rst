@@ -67,18 +67,17 @@ Download `ta-lib-0.4.0-src.tar.gz <http://prdownloads.sourceforge.net/ta-lib/ta-
     $ sudo make install
 
 
-=====
-Usage
-=====
+Profit
+======
 
 Running
 -------
 
-Here is an example of running the `marketcrush` backtest:
+We provide some example config files in the `configs` directory. We also provide some dummy data in the `sample_data` directory. Here is an example of running the `marketcrush` backtest using the demo data and the config file:
 
 .. code:: console
 
-  $ marketcrush backtest configs/ma_crossover.yaml
+  $ marketcrush backtest configs/trend_following.yaml
 
 or
 
@@ -103,72 +102,5 @@ Once `TA-lib` is installed, to install `marketcrush`, just run from the main dir
 
 Virtualenv
 ==========
-It is strongly recommended that you install python packages in a `virtualenv <https://virtualenv.pypa.io/en/stable/>`_. Here are some brief steps to install `virtualenv` on linux:
+It is strongly recommended that you install python packages in a `virtualenv <https://virtualenv.pypa.io/en/stable/>`_. Here are some brief steps to `install virtualenv on ubuntu <https://gist.github.com/basaks/b33ea9106c7d1d72ac3a79fdcea430eb>`_.
 
-**Install pip**
-
-.. code:: console
-
-  $ sudo apt-get install python-pip
-
-**Install virtualenv**
-
-.. code:: console
-
-  $ sudo pip install virtualenv
-
-I store my virtualenvs in a dir `~/venvs`
-
-.. code:: console
-
-  $ mkdir ~/venvs
-
-At this point you are all set to use `virtualenv` with the standard commands. However, I prefer to use the extra commands included in `virtualenvwrapper`. Lets set that up.
-
-**Install virtualenvwrapper**
-
-.. code:: console
-
-  $ sudo pip install virtualenvwrapper
-
-Set `WORKON_HOME` to your `virtualenv` dir
-
-.. code:: console
-
-  $ export WORKON_HOME=~/venvs
-
-Add `virtualenvwrapper.sh` to `.bashrc`
-
-Add this line to the end of `~/.bashrc` so that the `virtualenvwrapper` commands are loaded.
-
-`source /usr/local/bin/virtualenvwrapper.sh`
-
-Exit and re-open your shell, or reload `.bashrc` with the command `source ~/.bashrc` and you’re ready to go.
-
-Create a new `virtualenv`
-
-.. code:: console
-
-  $ mkvirtualenv marketcrush
-
-To create a `python3` `virtualenv` use the following:
-
-.. code:: console
-
-  $ mkvirtualenv -p python3 marketcrush
-
-This will create a `python3` `virtualenv` using your system installed `python3` version. If you want to install another `python3` interpreter, `follow this approach <https://github.com/basaks/py36-ubuntu>`_.
-
-To exit your new virtualenv, use `deactivate`:
-
-.. code:: console
-
-  $ deactivate
-
-Switch between enviornments with `workon`
-
-To load or switch between `virtualenv`, use the workon command:
-
-.. code:: console
-
-  $ workon marketcrush
