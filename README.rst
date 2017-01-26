@@ -104,3 +104,13 @@ Virtualenv
 ==========
 It is strongly recommended that you install python packages in a `virtualenv <https://virtualenv.pypa.io/en/stable/>`_. Here are some brief steps to `install virtualenv on ubuntu <https://gist.github.com/basaks/b33ea9106c7d1d72ac3a79fdcea430eb>`_.
 
+Matplotlib Issue in Virtualenv
+------------------------------
+
+Users have reported `matplotlib` import issues in `virtualenv`. The recommended solution under linux is:
+
+.. code:: console
+
+    $ sudo apt-get -y build-dep matplotlib
+
+This command installs all the build dependencies for matplotlib.
