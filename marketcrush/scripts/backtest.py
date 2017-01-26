@@ -3,10 +3,12 @@ import os
 import click
 import logging
 import pandas as pd
-import matplotlib.pylab as plt
 from marketcrush import config
 from marketcrush.strategies import strategies
 from marketcrush import logger
+from marketcrush.compat import HasMatplotlib
+if HasMatplotlib:
+    import matplotlib.pylab as plt
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)

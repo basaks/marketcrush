@@ -1,5 +1,9 @@
 import yaml
+import logging
+from marketcrush.compat import HasMatplotlib
 
+log = logging.getLogger(__name__)
+log = log.setLevel(logging.INFO)
 
 class Config:
     """Class representing the global configuration of the marketcrush scripts
@@ -18,3 +22,8 @@ class Config:
         self.strategy_parameters = s['parameters']
         self.output_file = s['output']['file']
         self.show = s['show_plot']
+        if self.show and (not HasMatplotlib):
+            self.show = False
+            log.warning('Matplotlib could not be imported. Plotting will be'
+                        'disabled!')
+
